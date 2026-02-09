@@ -1,0 +1,39 @@
+name: ci-python-unittest
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt -y update
+          sudo apt install python3-numpy
+      - name: Test Structure Operations with unittest
+        if: ${{ always() }}
+        run: |
+          python3 Structure_Operations_Test.py
+      - name: Test Complete Geometry Operations with unittest
+        if: ${{ always() }}
+        run: |
+          python3 Geometry_Operations_Tests_Full.py
+      - name: Test Method of Joints Code with unittest
+        if: ${{ always() }}
+        run: |
+          python3 Method_of_Joints_Tests.py
+      - name: Project 2 Grader Code
+        if: ${{ always() }}
+        run: |
+          ./Project_2_Grader
+      - name: Project 2 Grader (Debug Mode)
+        if: ${{ always() }}
+        run: |
+          ./Project_2_Grader_Reduced
