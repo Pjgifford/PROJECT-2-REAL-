@@ -78,11 +78,11 @@ Q76::T
 Q77::T
 Q78::T
 Q79::T
-Q80::
-Q81::
-Q82::
-Q83::
-Q84::
-Q85::
-Q86::
-Q87::
+Q80::5.27
+Q81::5.67
+Q82::11.33
+Q83::N
+Q84::N
+Q85::N
+Q86::When looking at the three trusses, the main differences come down to how they handle the weight and what they look like. The Gabled Howe truss is a classic that spreads the force out really well through its triangles, while the Scissor truss is usually picked more for its looks since it allows for those high vaulted ceilings. In terms of strength, even the highest force we found (like the 29.35 kips in the Modified Fan) only created a stress of 5.27 ksi, which is nothing compared to the 50 ksi it would take to actually break the steel.
+Q87::Based on the math, I'd go with the Gabled Howe truss because it’s easily the best "bang for your buck" design. It handles the point loads really efficiently with its triangular layout, keeping the member forces in a super safe range without needing a ton of extra steel. Even though the Scissor truss is better for aesthetics if you want high vaulted ceilings, the Howe design is much more practical since the stresses are nowhere near that 50 ksi yield limit.
