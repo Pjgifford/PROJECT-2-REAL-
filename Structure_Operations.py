@@ -27,7 +27,7 @@ def StaticallyDeterminate(nodes,bars):
     
     # Compute if b + r = 2j (Equation 3-1 of the textbook)
     if(n_bars + n_reactions < 2*n_nodes):
-        sys.exit("The truss is unstable")
+        sys.exit("The truss is unstable; did you input all of the reaction constraints correctly?")
     elif(n_bars + n_reactions > 2*n_nodes):
         sys.exit("The truss is statically indeterminate, and cannot be resolved using method of joints")
     else:
@@ -53,9 +53,48 @@ def ComputeReactions(nodes):
     
     # Continue from here
     # Sum of moments about the pin
-
+        #this gets the location of the pin in x and y coordinates
+    [pin_x, pin_y] = pin_node.location
+        #this gets the x and y coordinates of the roller like above
+    [roller_x, roller_y] = roller_node.location
+    roller_reaction = 0
+    for node in nodes:
+        [node_x,node_y] = node.location
+            # contributions in the y direction
+        roller_reaction += node.yforce_external * (node_x - pin_x)
+            #contributions in the x direction
+        roller_reaction += node.xforce_external * (pin_y - node_y)
+    if(roller_node.constraint=="roller_no_xdisp"):
+            roller_reaction = -roller_reaction/(pin_y - roller_y)
+            roller_node.AddReactionXForce(roller_reaction)
+    elif(roller_node.constraint=="roller_no_ydisp"):
+            roller_reaction = -roller_reaction/(roller_x - pin_x)
+            roller_node.AddReactionYForce(roller_reaction)
+            
     # sum of forces in y direction
-
+    total_external_y = 0
+    for node in nodes:
+        total_external_y += node.yforce_external
+        
+    # Add the roller reaction ONLY if it acts in the Y direction
+    if roller_node.constraint == "roller_no_ydisp":
+        total_external_y += roller_reaction
+        
+    # The pin reaction must balance the total y forces
+    pin_reaction_y = -total_external_y
+    pin_node.AddReactionYForce(pin_reaction_y)
+        
     # sum of forces in x direction
+    total_external_x = 0 
+    for node in nodes:
+        total_external_x += node.xforce_external
+
+    # Add the roller reaction ONLY if it acts in the X direction
+    if roller_node.constraint == "roller_no_xdisp":
+        total_external_x += roller_reaction
+
+    # The pin reaction must balance the total x forces
+    pin_reaction_x = -total_external_x
+    pin_node.AddReactionXForce(pin_reaction_x)
     
     
